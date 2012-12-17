@@ -13,7 +13,7 @@ public class Reader {
         public int noCols;
     
 	private ArrayList<ArrayList> store = new ArrayList<>();
-        private ArrayList<Set> attributeTypes = new ArrayList<>();
+        private ArrayList<Set> attClasses = new ArrayList<>();
 	private boolean setEmptyToNull = true;
         private boolean firstRowLabels = false;
         
@@ -28,17 +28,14 @@ public class Reader {
 		    dataRow = CSVFile.readLine();
 	    }
             CSVFile.close();
-            // Metadata calculations for this datset.
+            // Metadata calculations for this dataset.
             calcNoCols();
             calcNoRows();
+            buildAttClasses();
 	}
         
-        public Set<String> getAttributeClasses(int col) {
-            Set<String> colClasses = new HashSet<>();
-            for(int i = startRow; i < noRows; i++) {
-                colClasses.add(getCell(i, col));
-            }
-            return colClasses;
+        public Set getClasses(int col) {
+            return attClasses.get(col);
         }
 	
 	public ArrayList getRow(int row) {
@@ -89,6 +86,20 @@ public class Reader {
         private int calcNoCols() {
             noCols = store.get(0).size();
             return noCols;
+        }
+        
+        private void buildAttClasses() {
+            for(int i = 0; i < noCols; i++) {
+                attClasses.add(getAttClasses(i));
+            }
+        }
+        
+        private Set<String> getAttClasses(int col) {
+            Set<String> colClasses = new HashSet<>();
+            for(int i = startRow; i < noRows; i++) {
+                colClasses.add(getCell(i, col));
+            }
+            return colClasses;
         }
 
 }

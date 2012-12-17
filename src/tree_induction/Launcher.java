@@ -19,7 +19,7 @@ public class Launcher {
 //        System.out.println(myReader.calcNoRows());
 //        System.out.println(myReader.calcNoCols());
         ToStringHelper help = new ToStringHelper();
-        String classes = help.toString(myReader.getAttributeClasses(0));
+        String classes = help.toString(myReader.getClasses(3));
         System.out.println(classes);
     	myReader.printRow(0);
         treeSelection myTree = new treeSelection(myReader, 6);

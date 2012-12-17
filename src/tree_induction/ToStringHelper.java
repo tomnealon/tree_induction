@@ -1,6 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Taken from http://stackoverflow.com/questions/395401/printing-java-collections-nicely-tostring-doesnt-return-pretty-output
+ * 
  */
 package tree_induction;
 
