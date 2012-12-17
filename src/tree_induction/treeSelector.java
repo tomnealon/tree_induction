@@ -20,11 +20,16 @@ public class treeSelector {
         classInfoGain = infoNeed();
     }
     
-    public List getSorted() {
-        List<Integer> sortedAtt = new ArrayList<>();
-        List<Integer> attInfoGain = new ArrayList<>();
-        
-        return sortedAtt;
+    public int getBestAtt(List<Integer> colList) {
+        int best =  0;
+        double currentInfo = 0;
+        for(int col : colList) {
+            if(infoAtt(col) > currentInfo) {
+                currentInfo = infoAtt(col);
+                best = col;
+            }
+        }        
+        return best;
     }
     
     private double infoNeed() {
