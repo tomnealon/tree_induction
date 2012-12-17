@@ -8,7 +8,11 @@ import java.util.ArrayList;
 
 public class Reader {
 	private ArrayList<ArrayList> store = new ArrayList<>();
+        private ArrayList<ArrayList> attributeTypes = new ArrayList<>();
+        private int noRows;
+        private int noCols;
 	private boolean setEmptyToNull = true;
+        private boolean firstRowLabels = false;
 
 	public Reader(String fileName) throws IOException {
 		BufferedReader CSVFile = new BufferedReader(new FileReader(fileName));
@@ -20,6 +24,10 @@ public class Reader {
 	    }
 		CSVFile.close();
 	}
+        
+        public void getAttributeTypes(int col) {
+            
+        }
 	
 	public ArrayList getRow(int row) {
 		return store.get(row);
@@ -55,10 +63,19 @@ public class Reader {
 	}
         
         private ArrayList<?> procColumn(int colNo, int valuesBoundary) {
-            ArrayList DiscreteValues = null;
+            ArrayList discreteValues = null;
             ArrayList rawColumn = store.get(colNo);
             
-            return DiscreteValues;
+            return discreteValues;
+        }
+        
+        private int calcNoRows() {
+            
+            return noRows;
+        }
+        
+        private int calcNoCols() {
+            return noCols;
         }
 
 }
