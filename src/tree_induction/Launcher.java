@@ -24,8 +24,16 @@ public class Launcher {
         System.out.println(classes);
     	myReader.printRow(0);
         System.out.println();
-        treeSelection myTree = new treeSelection(myReader, 4);
-        double info = myTree.infoNeed(4);
+        treeSelector myTree = new treeSelector(myReader, 4);
+        double info;
+        info = myTree.testAtt(0);
+        System.out.println(myTree.classInfoGain);
+        System.out.println(info);
+        info = myTree.testAtt(1);
+        System.out.println(info);
+        info = myTree.testAtt(2);
+        System.out.println(info);
+        info = myTree.testAtt(3);
         System.out.println(info);
     }
     
