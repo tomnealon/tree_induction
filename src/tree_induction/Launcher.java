@@ -16,8 +16,14 @@ public class Launcher {
     	Reader myReader = new Reader("./data_sources/car.data");
     	System.out.println(myReader.getCell(0, 3));
     	System.out.println(myReader.getCell(4, 2));
+//        System.out.println(myReader.calcNoRows());
+//        System.out.println(myReader.calcNoCols());
+        ToStringHelper help = new ToStringHelper();
+        String classes = help.toString(myReader.getAttributeClasses(0));
+        System.out.println(classes);
     	myReader.printRow(0);
         treeSelection myTree = new treeSelection(myReader, 6);
+        
     }
     
     

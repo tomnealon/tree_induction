@@ -4,15 +4,20 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class Reader {
+        public int noRows;
+        public int noCols;
+    
 	private ArrayList<ArrayList> store = new ArrayList<>();
-        private ArrayList<ArrayList> attributeTypes = new ArrayList<>();
-        private int noRows;
-        private int noCols;
+        private ArrayList<Set> attributeTypes = new ArrayList<>();
 	private boolean setEmptyToNull = true;
         private boolean firstRowLabels = false;
+        
+        private int startRow = 0;
 
 	public Reader(String fileName) throws IOException {
 		BufferedReader CSVFile = new BufferedReader(new FileReader(fileName));
@@ -22,19 +27,26 @@ public class Reader {
 			store.add(setTypeList(dataArray));
 		    dataRow = CSVFile.readLine();
 	    }
-		CSVFile.close();
+            CSVFile.close();
+            // Metadata calculations for this datset.
+            calcNoCols();
+            calcNoRows();
 	}
         
-        public void getAttributeTypes(int col) {
-            
+        public Set<String> getAttributeClasses(int col) {
+            Set<String> colClasses = new HashSet<>();
+            for(int i = startRow; i < noRows; i++) {
+                colClasses.add(getCell(i, col));
+            }
+            return colClasses;
         }
 	
 	public ArrayList getRow(int row) {
 		return store.get(row);
 	}
 	
-	public Object getCell(int row, int col) {
-		return store.get(row).get(col);
+	public String getCell(int row, int col) {
+		return String.valueOf(store.get(row).get(col));
 	}
 	
 	public void printRow(int row) {
@@ -70,11 +82,12 @@ public class Reader {
         }
         
         private int calcNoRows() {
-            
+            noRows = store.size();
             return noRows;
         }
         
         private int calcNoCols() {
+            noCols = store.get(0).size();
             return noCols;
         }
 
