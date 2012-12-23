@@ -24,7 +24,7 @@ public class Launcher {
         System.out.println(classes);
     	myReader.printRow(0);
         System.out.println();
-        treeSelector myTree = new treeSelector(myReader, 4);
+        Id3Classifier myTree = new Id3Classifier(myReader, 4);
         double info;
         info = myTree.testAtt(0);
         System.out.println(myTree.classInfoGain);

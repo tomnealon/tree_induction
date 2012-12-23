@@ -9,12 +9,12 @@ import java.util.Set;
  *
  * @author tom
  */
-public class treeSelector {
+public class Id3Classifier {
     private ReaderMemory reader;
     private int classAtt;
     public double classInfoGain;
     
-    public treeSelector(ReaderMemory reader, int classAtt)  {
+    public Id3Classifier(ReaderMemory reader, int classAtt)  {
         this.reader = reader;
         this.classAtt = classAtt;
         classInfoGain = infoNeed();
