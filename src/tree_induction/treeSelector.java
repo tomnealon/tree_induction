@@ -10,11 +10,11 @@ import java.util.Set;
  * @author tom
  */
 public class treeSelector {
-    private Reader reader;
+    private ReaderMemory reader;
     private int classAtt;
     public double classInfoGain;
     
-    public treeSelector(Reader reader, int classAtt)  {
+    public treeSelector(ReaderMemory reader, int classAtt)  {
         this.reader = reader;
         this.classAtt = classAtt;
         classInfoGain = infoNeed();
@@ -35,7 +35,7 @@ public class treeSelector {
     private double infoNeed() {
         double info = 0;
         int noClasses = reader.getValues(classAtt).size();
-        double rows = reader.noRows;
+        double rows = reader.getRows();
         Iterator valueIterator = reader.getValues(classAtt).iterator();
         while(valueIterator.hasNext()) {
             String currentValue = String.valueOf(valueIterator.next());
@@ -68,7 +68,7 @@ public class treeSelector {
             Iterator valueIterator = reader.getValues(classAtt).iterator();
             String testValue = (String) testIterator.next();
             double noValues = reader.valueOccurs(testValue, col);
-            double testInfoMult = noValues / reader.noRows;
+            double testInfoMult = noValues / reader.getRows();
             double testInfoForValue = 0;
             while(valueIterator.hasNext()) {
                 String classValue = (String) valueIterator.next();
@@ -91,7 +91,7 @@ public class treeSelector {
      */
     private int valueOccursForColValue(String classValue, int col, String colValue) {
         int occurances = 0;
-        for(int i = 0; i < reader.noRows; i++) {
+        for(int i = 0; i < reader.getRows(); i++) {
             if(reader.getCell(i, col).equals(colValue) && reader.getCell(i, classAtt).equals(classValue)) {
                 occurances++;
             }

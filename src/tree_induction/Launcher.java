@@ -13,8 +13,8 @@ public class Launcher {
     
     public static void launch() throws IOException {
         System.out.println("Working Directory = " + System.getProperty("user.dir"));      
-    	//Reader myReader = new Reader("./data_sources/car.data");
-        Reader myReader = new Reader("./data_sources/Book1.csv");
+    	//Reader myReader = new ReaderMemory("./data_sources/car.data");
+        ReaderMemory myReader = new ReaderMemory("./data_sources/Book1.csv");
 //    	System.out.println(myReader.getCell(0, 3));
 //    	System.out.println(myReader.getCell(4, 2));
 //        System.out.println(myReader.noRows);
