@@ -35,7 +35,7 @@ public class Id3Classifier {
     private double infoNeed() {
         double info = 0;
         int noClasses = reader.getValues(classAtt).size();
-        double rows = reader.getRows();
+        double rows = reader.getRowNo();
         Iterator valueIterator = reader.getValues(classAtt).iterator();
         while(valueIterator.hasNext()) {
             String currentValue = String.valueOf(valueIterator.next());
@@ -68,7 +68,7 @@ public class Id3Classifier {
             Iterator valueIterator = reader.getValues(classAtt).iterator();
             String testValue = (String) testIterator.next();
             double noValues = reader.valueOccurs(testValue, col);
-            double testInfoMult = noValues / reader.getRows();
+            double testInfoMult = noValues / reader.getRowNo();
             double testInfoForValue = 0;
             while(valueIterator.hasNext()) {
                 String classValue = (String) valueIterator.next();
@@ -91,7 +91,7 @@ public class Id3Classifier {
      */
     private int valueOccursForColValue(String classValue, int col, String colValue) {
         int occurances = 0;
-        for(int i = 0; i < reader.getRows(); i++) {
+        for(int i = 0; i < reader.getRowNo(); i++) {
             if(reader.getCell(i, col).equals(colValue) && reader.getCell(i, classAtt).equals(classValue)) {
                 occurances++;
             }

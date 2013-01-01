@@ -16,9 +16,11 @@ import java.util.Set;
  */
 public interface Reader {
     
-    int getRows();
+    Reader getSubsetReader(int col, String value);
     
-    int getCols();
+    int getRowNo();
+    
+    int getColNo();
     
     /**
      * Counts the number of times a particular value occurs in a given column.

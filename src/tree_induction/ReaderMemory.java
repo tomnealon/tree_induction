@@ -18,7 +18,12 @@ public class ReaderMemory implements Reader {
     private boolean firstRowLabels = false;
 
     private int startRow = 0;
-
+    
+    /**
+     * 
+     * @param fileName
+     * @throws IOException 
+     */
     public ReaderMemory(String fileName) throws IOException {
         BufferedReader CSVFile = new BufferedReader(new FileReader(fileName));
         String dataRow = CSVFile.readLine();
@@ -44,21 +49,30 @@ public class ReaderMemory implements Reader {
      * @param value 
      */
     public ReaderMemory(Reader parentReader, int col, String value) {
-        
+        for (int i = 0; i < parentReader.getRowNo(); i++) {
+            ArrayList currentRow = parentReader.getRow(i);
+            if(currentRow.get(col) == value) {
+                store.add((ArrayList) currentRow.remove(col));
+            }
+        }
+        // Metadata calculations for this dataset.
+        calcNoCols();
+        calcNoRows();
+        buildAttValues();
     }
     
+    @Override
     public Reader getSubsetReader(int col, String value) {
-        new Reader subset = new ReaderMemory(this, col, value);
-        return subset;
+        return new ReaderMemory(this, col, value);
     }
 
     @Override
-    public int getRows() {
+    public int getRowNo() {
         return noRows;
     }
 
     @Override
-    public int getCols() {
+    public int getColNo() {
         return noCols;
     }
 
