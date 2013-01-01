@@ -33,6 +33,24 @@ public class ReaderMemory implements Reader {
         calcNoRows();
         buildAttValues();
     }
+    
+    /**
+     * Constructor for creating a subset of an existing reader that is generated
+     * by taking all the rows that have a certain value in a certain column and 
+     * then removing that column.
+     * 
+     * @param parentReader
+     * @param col
+     * @param value 
+     */
+    public ReaderMemory(Reader parentReader, int col, String value) {
+        
+    }
+    
+    public Reader getSubsetReader(int col, String value) {
+        new Reader subset = new ReaderMemory(this, col, value);
+        return subset;
+    }
 
     @Override
     public int getRows() {
