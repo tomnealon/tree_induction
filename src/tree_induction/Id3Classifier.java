@@ -20,6 +20,13 @@ public class Id3Classifier {
         classInfoGain = infoNeed();
     }
     
+    /**
+     * Gives the attribute/column for which information gain is maximum or 
+     * entropy is minimum.
+     * 
+     * @param colList
+     * @return 
+     */
     public int getBestAtt(List<Integer> colList) {
         int best =  0;
         double currentInfo = 0;
@@ -32,6 +39,12 @@ public class Id3Classifier {
         return best;
     }
     
+    /**
+     * Calculated the information needed to classify a row according to the test
+     * column.
+     * 
+     * @return 
+     */
     private double infoNeed() {
         double info = 0;
         int noClasses = reader.getValues(classAtt).size();
@@ -47,6 +60,12 @@ public class Id3Classifier {
         return info;
     } 
     
+    /**
+     * Calculates the information/entropy of a given attribute/column.
+     * 
+     * @param col
+     * @return 
+     */
     public double infoAtt(int col) {
         double info = 0;
         Iterator valueIterator = reader.getValues(classAtt).iterator();
@@ -58,7 +77,8 @@ public class Id3Classifier {
     
 
     
-    /*
+    /**
+     * 
      *  Calculates the information gain for partitioning on that attribute.
      */
     public double testAtt(int col) {
@@ -85,7 +105,8 @@ public class Id3Classifier {
         return classInfoGain - testInfo;
     }
     
-    /*      
+    /**
+     * 
     *    Gives the number of times a classification value occurs in the same row
     *    as a certain value in another column.
      */
