@@ -8,14 +8,16 @@ import java.util.HashSet;
  * @author tom
  */
 public class TreeNode {
-    int splitAtt;
-    String value;
-    ArrayList<TreeNode> children = new ArrayList<>();
-    HashSet<String> childValues = new HashSet<>();
+    public TreeNode parent = null;
+    public String mostCommonClassificationValue = null;
+    public int splitAtt;
+    public String decidingValue;
+    public ArrayList<TreeNode> children = new ArrayList<>();
+    public HashSet<String> childValues = new HashSet<>();
     
     public TreeNode(int splitAtt, String value) {
         this.splitAtt = splitAtt; 
-        this.value = value;
+        this.decidingValue = value;
     }
     
     public void addChildValues(HashSet values) {

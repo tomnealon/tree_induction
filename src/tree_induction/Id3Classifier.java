@@ -23,11 +23,14 @@ public class Id3Classifier {
         newTree.addTopNode(splitAtt);
         newTree.setValues((HashSet) reader.getValues(splitAtt));
         
+        System.out.println("Added root node with Att: " + splitAtt);
+        
+        
         
         return newTree;
     }
     
-    private void addNode() {
+    private void getNode() {
         
     }
     
