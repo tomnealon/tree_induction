@@ -34,6 +34,22 @@ public class Id3Classifier {
         
     }
     
+    public double classificationRatio(String value) {
+        double ratio = 0;
+        ArrayList classificationList = reader.getColList(classAtt);
+        for (Iterator it = classificationList.iterator(); it.hasNext();) {
+            String eachValue = (String) it.next();
+            if(eachValue.equals(value)) {
+                ratio++;
+            }
+        }
+        if(ratio == 0) {
+            return 0;
+        }
+        ratio = ratio / reader.getColNo();
+        return ratio;
+    }
+    
     
     
     /**

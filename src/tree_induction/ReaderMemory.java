@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 
@@ -50,7 +51,7 @@ public class ReaderMemory implements Reader {
      */
     public ReaderMemory(Reader parentReader, int col, String value) {
         for (int i = 0; i < parentReader.getRowNo(); i++) {
-            ArrayList currentRow = parentReader.getRow(i);
+            ArrayList currentRow = parentReader.getRowList(i);
             if(currentRow.get(col) == value) {
                 store.add((ArrayList) currentRow.remove(col));
             }
@@ -59,6 +60,16 @@ public class ReaderMemory implements Reader {
         calcNoCols();
         calcNoRows();
         buildAttValues();
+    }
+    
+    @Override
+    public ArrayList getColList(int col) {
+        ArrayList<String> colList = new ArrayList<>();
+        for (Iterator<ArrayList> it = store.iterator(); it.hasNext();) {
+            ArrayList eachRow = it.next();
+            colList.add((String) eachRow.get(col));
+        }
+        return colList;
     }
     
     @Override
@@ -93,7 +104,7 @@ public class ReaderMemory implements Reader {
     }
 
     @Override
-    public ArrayList getRow(int row) {
+    public ArrayList getRowList(int row) {
             return store.get(row);
     }
 
@@ -103,7 +114,7 @@ public class ReaderMemory implements Reader {
     }
 
     public void printRow(int row) {
-            ArrayList dataArray = getRow(row);
+            ArrayList dataArray = getRowList(row);
             for (Object item:dataArray) {
                     System.out.print(item + "\t");
             }

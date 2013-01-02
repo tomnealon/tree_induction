@@ -24,17 +24,23 @@ public class Launcher {
         System.out.println(classes);
     	myReader.printRow(0);
         System.out.println();
-        Id3Classifier myTree = new Id3Classifier(myReader, 4);
+        Id3Classifier myClassifier = new Id3Classifier(myReader, 4);
         double info;
-        info = myTree.testAtt(0);
-        System.out.println(myTree.classInfoGain);
+        info = myClassifier.testAtt(0);
+        System.out.println(myClassifier.classInfoGain);
         System.out.println(info);
-        info = myTree.testAtt(1);
+        info = myClassifier.testAtt(1);
         System.out.println(info);
-        info = myTree.testAtt(2);
+        info = myClassifier.testAtt(2);
         System.out.println(info);
-        info = myTree.testAtt(3);
+        info = myClassifier.testAtt(3);
         System.out.println(info);
+        
+        
+        String colValues = help.toString(myReader.getColList(4));
+        System.out.println(colValues);
+        
+        System.out.println(myClassifier.classificationRatio("no"));
     }
     
     

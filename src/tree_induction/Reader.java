@@ -29,9 +29,11 @@ public interface Reader {
     
     Set getValues(int col);
     
-    ArrayList getRow(int row);
+    ArrayList getRowList(int row);
     
     String getCell(int row, int col);
+    
+    ArrayList getColList(int col);
     
     
     

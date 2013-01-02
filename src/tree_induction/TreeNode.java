@@ -9,7 +9,7 @@ import java.util.HashSet;
  */
 public class TreeNode {
     public TreeNode parent = null;
-    public String mostCommonClassificationValue = null;
+    public String classificationValue = null;
     public int splitAtt;
     public String decidingValue;
     public ArrayList<TreeNode> children = new ArrayList<>();
