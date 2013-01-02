@@ -18,6 +18,10 @@ public class TreeNode {
         this.value = value;
     }
     
+    public void addChildValues(HashSet values) {
+        this.childValues = values;
+    }
+    
     public void addChild() {
         
     }

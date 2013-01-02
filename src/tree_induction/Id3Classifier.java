@@ -1,9 +1,6 @@
 package tree_induction;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  *
@@ -20,6 +17,22 @@ public class Id3Classifier {
         classInfoGain = infoNeed();
     }
     
+    public DecisionTree buildDecisionTree() {
+        DecisionTree newTree = new DecisionTree();
+        int splitAtt = getBestAtt();
+        newTree.addTopNode(splitAtt);
+        newTree.setValues((HashSet) reader.getValues(splitAtt));
+        
+        
+        return newTree;
+    }
+    
+    private void addNode() {
+        
+    }
+    
+    
+    
     /**
      * Gives the attribute/column for which information gain is maximum or 
      * entropy is minimum.
@@ -34,6 +47,26 @@ public class Id3Classifier {
             if(infoAtt(col) > currentInfo) {
                 currentInfo = infoAtt(col);
                 best = col;
+            }
+        }        
+        return best;
+    }
+    
+    /**
+     * Gives the attribute/column for which information gain is maximum or 
+     * entropy is minimum.
+     * 
+     * @return 
+     */
+    public int getBestAtt() {
+        int best =  0;
+        double currentInfo = 0;
+        for(int col = 0; col < reader.getColNo(); col++) {
+            if(col != classAtt) {
+                if(infoAtt(col) > currentInfo) {
+                    currentInfo = infoAtt(col);
+                    best = col;
+                }
             }
         }        
         return best;
