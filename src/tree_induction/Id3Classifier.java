@@ -7,23 +7,55 @@ import java.util.*;
  * @author tom
  */
 public class Id3Classifier {
-    private ReaderMemory reader;
+    private Reader reader;
     private int classAtt;
     public double classInfoGain;
+    private Set classificationValues;
     
-    public Id3Classifier(ReaderMemory reader, int classAtt)  {
+    public Id3Classifier(Reader reader, int classAtt)  {
         this.reader = reader;
         this.classAtt = classAtt;
         classInfoGain = infoNeed();
+        this.classificationValues = reader.getValues(classAtt);
     }
     
     public DecisionTree buildDecisionTree() {
+        // Define new DecisionTree
         DecisionTree newTree = new DecisionTree();
         int splitAtt = getBestAtt();
+        // Set top node with the splitting attribute.
         newTree.addTopNode(splitAtt);
         newTree.setValues((HashSet) reader.getValues(splitAtt));
         
         System.out.println("Added root node with Att: " + splitAtt);
+        
+        
+        
+        // Go through each value of the splitting attribute and create a child 
+        // node for that value and evaluate it's helpfulness in terms of the 
+        // ratio of values in the classifcation attribute.
+        HashSet<String> splitAttValues = (HashSet) reader.getValues(splitAtt);
+        // Iterate through the values of the splitting attribute.
+        for(String eachValue : splitAttValues) {
+            // Create a reader for each of those values. Each reader is using a
+            // subset where each row has each splitting attribute value.
+            Reader subReader = reader.getSubsetReader(splitAtt, eachValue);
+            // Calculate the new position of the classification attribute once 
+            // the splitting attribute has been removed.
+            int childClassAtt;
+            if(splitAtt < classAtt) {
+                childClassAtt = classAtt--;
+            } else {
+                childClassAtt = classAtt;
+            }
+            
+            subReader.getValues(childClassAtt);
+            // Feed that reader to a new Id3Classifier.
+            Id3Classifier subClassifier = new Id3Classifier(subReader, childClassAtt);
+            String childClassificationValue = subClassifier.getMostCommonClassificationValue();
+            
+            subClassifier.classificationRatio(eachValue);
+        }
         
         TreeNode parent = new TreeNode;
         
@@ -34,6 +66,27 @@ public class Id3Classifier {
         
         TreeNode child = new TreeNode(classAtt, null);
         return child;
+    }
+    
+    /**
+     * Should be combined with classificationRatio method to return a new object
+     * type containing the ratio and the most common value so the ratios are not
+     * calculated twice.
+     * 
+     * @return 
+     */
+    public String getMostCommonClassificationValue() {
+        String mostCommonValue = null;
+        double currentBestRatio = 0;
+        for (Iterator it = classificationValues.iterator(); it.hasNext();) {
+            String eachValue = (String) it.next();
+            double currentRatio = classificationRatio(eachValue);
+            if(currentRatio > currentBestRatio) {
+                currentBestRatio = currentRatio;
+                mostCommonValue = eachValue;
+            }
+        }
+        return mostCommonValue;
     }
     
     public double classificationRatio(String value) {
