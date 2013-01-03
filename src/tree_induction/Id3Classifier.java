@@ -25,13 +25,15 @@ public class Id3Classifier {
         
         System.out.println("Added root node with Att: " + splitAtt);
         
-        
+        TreeNode parent = new TreeNode;
         
         return newTree;
     }
     
-    private void getNode() {
+    private TreeNode makeNode(TreeNode parent, int splitAtt) {
         
+        TreeNode child = new TreeNode(classAtt, null);
+        return child;
     }
     
     public double classificationRatio(String value) {
@@ -46,7 +48,10 @@ public class Id3Classifier {
         if(ratio == 0) {
             return 0;
         }
-        ratio = ratio / reader.getColNo();
+        //System.out.println("Classification values occur: " + ratio);
+        //System.out.println("Thare are Rows: " + (double) reader.getRowNo());
+        ratio = ratio / (double) reader.getRowNo();
+        //System.out.println("Classification ratio is: " + ratio);
         return ratio;
     }
     

@@ -26,6 +26,8 @@ public class DecisionTree {
         }
     }
     
+    
+    
     public boolean setValues(HashSet values) {
         if(topNode != null) {
             topNode.addChildValues(values);
