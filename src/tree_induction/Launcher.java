@@ -41,6 +41,10 @@ public class Launcher {
         System.out.println(colValues);
         
         System.out.println(myClassifier.classificationRatio("no"));
+        
+        System.out.println(myClassifier.getBestAttValueForClassValue(0, "no"));
+        
+        //System.out.println(myClassifier.getCommonClassValueForAttValue(0, "senior"));
     }
     
     

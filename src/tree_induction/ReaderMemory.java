@@ -3,10 +3,7 @@ package tree_induction;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 
 public class ReaderMemory implements Reader {
@@ -61,6 +58,8 @@ public class ReaderMemory implements Reader {
         calcNoRows();
         buildAttValues();
     }
+    
+
     
     @Override
     public ArrayList getColList(int col) {

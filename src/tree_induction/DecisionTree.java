@@ -1,29 +1,60 @@
 package tree_induction;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
- *
+ * Provides an interface for a collection of decision nodes allowing a tree to 
+ * be used to analyse a data set.
  * @author tom
  */
 public class DecisionTree {
-    TreeNode topNode = null;
-
-    public DecisionTree(TreeNode topNode) {
-        this.topNode = topNode;
+    private TreeNode topNode = null;
+    private ArrayList<ArrayList> scaffold = new ArrayList<>();
+    private int currentLevel = 0;
+    private int currentNodePos = 0;
+    
+    public DecisionTree() {  
     }
     
-    public DecisionTree() {
-        
-    }
-    
+  
     public boolean addTopNode(int att) {
         if(topNode != null) {
             topNode = new TreeNode(att, null);
+            ArrayList<TreeNode> level = new ArrayList();
+            level.add(topNode);
+            scaffold.add(level);
             return true;
         } else {
             return false;
         }
+    }
+    
+    public void incrementLevel() {
+        currentLevel++;
+        currentNodePos = 0;
+    }
+    
+    public void addLevel(int splitAtt, Set values, Id3Classifier classifier) {
+        ArrayList<TreeNode> newLevel = new ArrayList<>(); 
+        for (Iterator parentIt = scaffold.get(currentLevel).iterator(); parentIt.hasNext();) {
+            TreeNode eachParent = (TreeNode) parentIt.next();
+            for (Iterator valuesIt = values.iterator(); valuesIt.hasNext();) {
+                String eachValue  = (String) valuesIt.next();
+                TreeNode newNode = new TreeNode(splitAtt, eachValue);
+                eachParent.linkChild(newNode, eachValue);
+                if(classifier.)
+                newLevel.add(newNode);
+            }
+        }
+        scaffold.add(newLevel);
+        currentLevel++;
+    }
+    
+    public void addNode() {
+        scaffold.add(scaffold);
     }
     
     

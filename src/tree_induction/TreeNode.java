@@ -15,12 +15,21 @@ public class TreeNode {
     public String decidingValue;
     public ArrayList<TreeNode> children = new ArrayList<>();
     public HashSet<String> childValues = new HashSet<>();
-    
+    public HashMap valuesChildrenMap = new HashMap();
     public HashMap classificationRatioMap = new HashMap();
+    private String finalDecision = null;
+    
+    public void setFinalDecision(String decision) {
+        this.finalDecision = decision;
+    }
     
     public TreeNode(int splitAtt, String value) {
         this.splitAtt = splitAtt; 
         this.decidingValue = value;
+    }
+    
+    public void linkChild(TreeNode child, String value) {
+        valuesChildrenMap.put(value, child);
     }
     
     public void addRatio(String value, double ratio) {

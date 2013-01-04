@@ -33,7 +33,6 @@ public class Id3Classifier {
         // Set top node with the splitting attribute.
         newTree.addTopNode(splitAtt);
         newTree.setValues((HashSet) reader.getValues(splitAtt));
-        
         System.out.println("Added root node with Att: " + splitAtt);
         
         
@@ -64,15 +63,20 @@ public class Id3Classifier {
             subClassifier.classificationRatio(eachValue);
         }
         
-        TreeNode parent = new TreeNode;
+        //TreeNode parent = new TreeNode;
         
         return newTree;
     }
     
-    private TreeNode makeNode(TreeNode parent, int splitAtt) {
-        
-        TreeNode child = new TreeNode(classAtt, null);
-        return child;
+    private String checkDecisionValue(String attValue) {
+        for (Iterator it = classificationValues.iterator(); it.hasNext();) {
+            String eachValue = (String) it.next();
+            if(classificationRatio(eachValue) = 1) {
+
+            } else {
+                return null;
+            }
+        }
     }
     
     /**
@@ -220,6 +224,74 @@ public class Id3Classifier {
             testInfo = testInfo + testInfoForValue * testInfoMult;
         }
         return classInfoGain - testInfo;
+    }
+    
+    /**
+     * Find the most common classification value for a given attribute value.
+     * Used to pre-select which value of a given attribute is most useful for 
+     * predicting a classification value.
+     * @param att
+     * @param attValue
+     * @return 
+     */
+    public String getCommonClassValueForAttValue(int att, String attValue) {
+        String commonClassValue = null;
+        HashMap valueOccursMap = new HashMap();
+        for (Iterator it = classificationValues.iterator(); it.hasNext();) {
+            String eachValue = (String) it.next();
+            valueOccursMap.put(eachValue, 0);
+        }
+        for(int i = 0; i < reader.getRowNo(); i++) {
+            ArrayList currentRow = reader.getRowList(i);
+            if(currentRow.get(att).equals(attValue)) {
+                String currentValue = (String) currentRow.get(classAtt);
+                valueOccursMap.put(currentValue, (int) valueOccursMap.get(currentValue) + 1);
+            }
+        }
+        
+        ToStringHelper help = new ToStringHelper();
+        System.out.println(help.toString(valueOccursMap));
+        
+        int currentScore = 0;
+        for (Iterator it = classificationValues.iterator(); it.hasNext();) {
+            String eachValue = (String) it.next();
+            if((int) valueOccursMap.get(eachValue) > currentScore) {
+                currentScore = (int) valueOccursMap.get(eachValue);
+                commonClassValue = eachValue;
+                //System.out.println(valueOccursMap.get(eachValue) + " > " + currentScore);
+            }
+            
+        }
+        return commonClassValue;
+    }
+    
+    public String getBestAttValueForClassValue(int attCol, String classValue) {
+        String bestAttValue = null;
+        HashMap valueOccursMap = new HashMap();
+        for (Iterator it = reader.getValues(attCol).iterator(); it.hasNext();) {
+            String eachValue = (String) it.next();
+            valueOccursMap.put(eachValue, 0);
+        }
+        for(int i = 0; i < reader.getRowNo(); i++) {
+            ArrayList currentRow = reader.getRowList(i);
+            if(currentRow.get(classAtt).equals(classValue)) {
+                String currentValue = (String) currentRow.get(attCol);
+                valueOccursMap.put(currentValue, (int) valueOccursMap.get(currentValue) + 1);
+            }
+        }
+        ToStringHelper help = new ToStringHelper();
+        System.out.println(help.toString(valueOccursMap));
+        
+        int currentScore = 0;
+        for (Iterator it = reader.getValues(attCol).iterator(); it.hasNext();) {
+            String eachValue = (String) it.next();
+            if((int) valueOccursMap.get(eachValue) > currentScore) {
+                currentScore = (int) valueOccursMap.get(eachValue);
+                bestAttValue = eachValue;
+            }
+            
+        }
+        return bestAttValue;
     }
     
     /**
