@@ -23,6 +23,7 @@ public class ReaderMemory implements Reader {
      * @throws IOException 
      */
     public ReaderMemory(String fileName) throws IOException {
+        System.out.println("Reader created using: " + fileName);
         BufferedReader CSVFile = new BufferedReader(new FileReader(fileName));
         String dataRow = CSVFile.readLine();
         while (dataRow != null) {
@@ -47,16 +48,19 @@ public class ReaderMemory implements Reader {
      * @param value 
      */
     public ReaderMemory(Reader parentReader, int col, String value) {
+        
         for (int i = 0; i < parentReader.getRowNo(); i++) {
             ArrayList currentRow = parentReader.getRowList(i);
             if(currentRow.get(col) == value) {
-                store.add((ArrayList) currentRow.remove(col));
+                currentRow.remove(col);
+                store.add(currentRow);
             }
         }
         // Metadata calculations for this dataset.
         calcNoCols();
         calcNoRows();
         buildAttValues();
+        System.out.println("SubReader Created using col: " + col + " value: " + value);
     }
     
 
@@ -97,9 +101,8 @@ public class ReaderMemory implements Reader {
         return occurances;
     }
 
-    @Override
     public Set getValues(int col) {
-        return attValues.get(col);
+        return getAttValues(col);
     }
 
     @Override
@@ -160,7 +163,7 @@ public class ReaderMemory implements Reader {
         }
     }
 
-    private Set<String> getAttValues(int col) {
+    public Set<String> getAttValues(int col) {
         Set<String> colClasses = new HashSet<>();
         for(int i = startRow; i < noRows; i++) {
             colClasses.add(getCell(i, col));

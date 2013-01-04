@@ -27,7 +27,7 @@ public interface Reader {
      */
     int valueOccurs(String value, int col);
     
-    Set getValues(int col);
+    Set getAttValues(int col);
     
     ArrayList getRowList(int row);
     

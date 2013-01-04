@@ -17,7 +17,8 @@ public class Id3Classifier {
         this.reader = reader;
         this.classAtt = classAtt;
         classInfoGain = infoNeed();
-        this.classificationValues = reader.getValues(classAtt);
+        this.classificationValues = reader.getAttValues(classAtt);
+        System.out.println("Classifer Created using classAtt: " + classAtt);
     }
     
 //    public DecisionTree buildDecisionTree() {
@@ -115,8 +116,8 @@ public class Id3Classifier {
         int best =  0;
         double currentInfo = 0;
         for(int col : colList) {
-            if(infoAtt(col) > currentInfo) {
-                currentInfo = infoAtt(col);
+            if(testAtt(col) > currentInfo) {
+                currentInfo = testAtt(col);
                 best = col;
             }
         }        
@@ -130,16 +131,24 @@ public class Id3Classifier {
      * @return 
      */
     public int getBestAtt() {
+        System.out.println("getBestAtt");
         int best =  0;
         double currentInfo = 0;
         for(int col = 0; col < reader.getColNo(); col++) {
+//            System.out.println(reader.getColNo());
+//            System.out.println(col);
+//            System.out.println(classAtt);
+            //System.out.println(testAtt(col));
             if(col != classAtt) {
-                if(infoAtt(col) > currentInfo) {
-                    currentInfo = infoAtt(col);
+                
+                if(testAtt(col) > currentInfo) {
+                    //System.out.println(testAtt(col));
+                    currentInfo = testAtt(col);
                     best = col;
                 }
             }
         }        
+        System.out.println("getBestAtt best: "+best);
         return best;
     }
     
@@ -151,9 +160,9 @@ public class Id3Classifier {
      */
     private double infoNeed() {
         double info = 0;
-        int noClasses = reader.getValues(classAtt).size();
+        int noClasses = reader.getAttValues(classAtt).size();
         double rows = reader.getRowNo();
-        Iterator valueIterator = reader.getValues(classAtt).iterator();
+        Iterator valueIterator = reader.getAttValues(classAtt).iterator();
         while(valueIterator.hasNext()) {
             String currentValue = String.valueOf(valueIterator.next());
             double instances = reader.valueOccurs(currentValue, classAtt);
@@ -163,22 +172,7 @@ public class Id3Classifier {
         }
         return info;
     } 
-    
-    /**
-     * Calculates the information/entropy of a given attribute/column.
-     * 
-     * @param col
-     * @return 
-     */
-    public double infoAtt(int col) {
-        double info = 0;
-        Iterator valueIterator = reader.getValues(classAtt).iterator();
-        while(valueIterator.hasNext()) {
-            
-        }
-        return info;
-    }
-    
+      
 
     
     /**
@@ -187,9 +181,9 @@ public class Id3Classifier {
      */
     public double testAtt(int col) {
         double testInfo = 0;
-        Iterator testIterator = reader.getValues(col).iterator();
+        Iterator testIterator = reader.getAttValues(col).iterator();
         while(testIterator.hasNext()) {
-            Iterator valueIterator = reader.getValues(classAtt).iterator();
+            Iterator valueIterator = reader.getAttValues(classAtt).iterator();
             String testValue = (String) testIterator.next();
             double noValues = reader.valueOccurs(testValue, col);
             double testInfoMult = noValues / reader.getRowNo();
@@ -202,7 +196,7 @@ public class Id3Classifier {
                 if(matches != 0) {
                     testInfoForValue = testInfoForValue - (logTwo(matches / noValues) * (matches / noValues));
                 }
-                System.out.println(testValue + " " + classValue + " " + noValues + " " + matches + " " + testInfoForValue);
+                //System.out.println(testValue + " " + classValue + " " + noValues + " " + matches + " " + testInfoForValue);
             }
             testInfo = testInfo + testInfoForValue * testInfoMult;
         }
@@ -251,7 +245,7 @@ public class Id3Classifier {
     public String getBestAttValueForClassValue(int attCol, String classValue) {
         String bestAttValue = null;
         HashMap valueOccursMap = new HashMap();
-        for (Iterator it = reader.getValues(attCol).iterator(); it.hasNext();) {
+        for (Iterator it = reader.getAttValues(attCol).iterator(); it.hasNext();) {
             String eachValue = (String) it.next();
             valueOccursMap.put(eachValue, 0);
         }
@@ -266,7 +260,7 @@ public class Id3Classifier {
         System.out.println(help.toString(valueOccursMap));
         
         int currentScore = 0;
-        for (Iterator it = reader.getValues(attCol).iterator(); it.hasNext();) {
+        for (Iterator it = reader.getAttValues(attCol).iterator(); it.hasNext();) {
             String eachValue = (String) it.next();
             if((int) valueOccursMap.get(eachValue) > currentScore) {
                 currentScore = (int) valueOccursMap.get(eachValue);

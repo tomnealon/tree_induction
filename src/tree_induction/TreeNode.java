@@ -9,6 +9,7 @@ import java.util.HashSet;
  * @author tom
  */
 public class TreeNode {
+    public String myName = "nodey!";
     public TreeNode parent = null;
     public String classificationValue = null;
     public int splitAtt;
@@ -25,6 +26,7 @@ public class TreeNode {
     }
     
     public TreeNode(int splitAtt, String value, Reader dataSet) {
+        System.out.println("New Node:: SplitAt: "+splitAtt+" Using Value: "+value);
         this.splitAtt = splitAtt; 
         this.decidingValue = value;
         this.dataSet = dataSet;

@@ -26,15 +26,20 @@ public class DecisionTree {
     }
     
     public void growTree() {
-        boolean treeFinished = false;
+        System.out.println("begin grow tree");
+        
         int splitAtt = classifier.getBestAtt();
+         System.out.println("calculate splitAtt: " + splitAtt);
         // Set top node with the splitting attribute.
         addTopNode(splitAtt, dataSet);
-        setValues((HashSet) classifier.reader.getValues(splitAtt));
-        System.out.println("Added root node with Att: " + splitAtt);
-        while(treeFinished = false) {
-            
-            treeFinished = addLevel(classifier.reader.getValues(splitAtt));
+        setValues((HashSet) classifier.reader.getAttValues(splitAtt));
+        
+        int count = 0;
+        boolean treeFinished = false;
+        while(treeFinished == false) {
+            System.out.println("grow tree while count: " + count + " Level: "+currentLevel);
+            treeFinished = addLevel(classifier.reader.getAttValues(splitAtt));
+            count++;
             //subReader = reader.getSubsetReader(splitAtt, eachValue);
             //HashSet<String> splitAttValues = (HashSet) reader.getValues(splitAtt);
             //Id3Classifier subClassifier = new Id3Classifier(subReader, childClassAtt);
@@ -46,16 +51,19 @@ public class DecisionTree {
         }  
     }
   
-    public boolean addTopNode(int att, Reader reader) {
-        if(topNode != null) {
+    public void addTopNode(int att, Reader reader) {
+        System.out.println("Added root node with Att: " + att);
+//        if(topNode != null) {
             topNode = new TreeNode(att, null, reader);
             ArrayList<TreeNode> level = new ArrayList();
             level.add(topNode);
             scaffold.add(level);
-            return true;
-        } else {
-            return false;
-        }
+            ToStringHelper help = new ToStringHelper();
+            Iterator it = scaffold.get(currentLevel).iterator();
+//            return true;
+//        } else {
+//            return false;
+//        }
     }
     
     public void incrementLevel() {
@@ -64,15 +72,20 @@ public class DecisionTree {
     }
     
     public boolean addLevel(Set values) {
+        System.out.println("addLevel");
         ArrayList<TreeNode> newLevel = new ArrayList<>(); 
+        ToStringHelper help = new ToStringHelper();
+        help.toString(scaffold.get(currentLevel));
+        int currentClassAtt = classificationAtt;
         for (Iterator parentIt = scaffold.get(currentLevel).iterator(); parentIt.hasNext();) {
+            currentClassAtt--;
             TreeNode eachParent = (TreeNode) parentIt.next();
             for (Iterator valuesIt = values.iterator(); valuesIt.hasNext();) {
                 String eachValue  = (String) valuesIt.next();
                 int parentSplitAtt = eachParent.splitAtt;
                 //eachParent.getChildDataSet(eachValue);
                 Reader childDataSet = eachParent.getChildDataSet(eachValue);
-                Id3Classifier subClassifier = new Id3Classifier(childDataSet, classificationAtt);
+                Id3Classifier subClassifier = new Id3Classifier(childDataSet, currentClassAtt);
                 
                 int childSplitAtt = subClassifier.getBestAtt();
                 
@@ -91,7 +104,7 @@ public class DecisionTree {
         }
         scaffold.add(newLevel);
         currentLevel++;
-        return true;
+        return false;
     }
     
     public void addNode() {
