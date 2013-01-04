@@ -4,6 +4,8 @@
  */
 package tree_induction;
 
+import java.io.IOException;
+
 /**
  *
  * @author tom
@@ -11,9 +13,15 @@ package tree_induction;
 public class TestDecisionTree {
     DecisionTree myTree = new DecisionTree();
     
-    public void launch() {
-        myTree.addTopNode(1);
-        myTree.setValues(null);
+    public static void main(String[] args) throws IOException {
+        TestDecisionTree.launch();
+     }
+    
+    public static void launch() throws IOException {
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));      
+        ReaderMemory myReader = new ReaderMemory("./data_sources/Book1.csv");
+        Id3Classifier myClassifier = new Id3Classifier(myReader, 4);
+        myClassifier.buildDecisionTree();
     }
     
 }

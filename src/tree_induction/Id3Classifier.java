@@ -68,15 +68,21 @@ public class Id3Classifier {
         return newTree;
     }
     
-    private String checkDecisionValue(String attValue) {
-        for (Iterator it = classificationValues.iterator(); it.hasNext();) {
+    /**
+     * Checks to see if there is only one kind of classification value in the
+     * classification column. If there is it returns that value. Otherwise it
+     * returns null.
+     * @return 
+     */
+    public String checkDecisionValue() {
+        String commonValue = reader.getCell(0, classAtt);
+        for (Iterator it = reader.getColList(classAtt).iterator(); it.hasNext();) {
             String eachValue = (String) it.next();
-            if(classificationRatio(eachValue) = 1) {
-
-            } else {
+            if(!eachValue.equals(commonValue)) {
                 return null;
             }
         }
+        return commonValue;
     }
     
     /**

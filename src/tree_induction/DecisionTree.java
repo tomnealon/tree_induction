@@ -44,9 +44,16 @@ public class DecisionTree {
             for (Iterator valuesIt = values.iterator(); valuesIt.hasNext();) {
                 String eachValue  = (String) valuesIt.next();
                 TreeNode newNode = new TreeNode(splitAtt, eachValue);
+                
+                System.out.println("New Node SplitAtt: " + splitAtt + " Value: " + eachValue + " Level: " + currentLevel);
+                
                 eachParent.linkChild(newNode, eachValue);
-                if(classifier.)
-                newLevel.add(newNode);
+                String currentResultForNode = classifier.checkDecisionValue();
+                if(currentResultForNode != null) {
+                    newNode.classificationValue = currentResultForNode;
+                } else {
+                    newLevel.add(newNode);
+                }
             }
         }
         scaffold.add(newLevel);

@@ -26,6 +26,7 @@ public class TreeNode {
     public TreeNode(int splitAtt, String value) {
         this.splitAtt = splitAtt; 
         this.decidingValue = value;
+        
     }
     
     public void linkChild(TreeNode child, String value) {
