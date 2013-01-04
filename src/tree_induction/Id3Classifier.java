@@ -7,6 +7,13 @@ import java.util.*;
  * @author tom
  */
 public class Id3Classifier {
+    
+    // cutOffRatio is the ratio at which a decision node is considered 
+    // "good enough" for making a final decision on a tuple/data-row. It is 
+    // necessary where a set of attributes does not provide enough information 
+    // to make a decision tree that can make a definitive decision on how to
+    // classify that row.
+    private double cutOffRatio = 0.8;
     private Reader reader;
     private int classAtt;
     public double classInfoGain;
