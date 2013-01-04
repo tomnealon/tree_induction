@@ -8,16 +8,10 @@ import java.util.*;
  */
 public class Id3Classifier {
     
-    // cutOffRatio is the ratio at which a decision node is considered 
-    // "good enough" for making a final decision on a tuple/data-row. It is 
-    // necessary where a set of attributes does not provide enough information 
-    // to make a decision tree that can make a definitive decision on how to
-    // classify that row.
-    private double cutOffRatio = 0.8;
-    private Reader reader;
-    private int classAtt;
+    public Reader reader;
+    public int classAtt;
     public double classInfoGain;
-    private Set classificationValues;
+    public Set classificationValues;
     
     public Id3Classifier(Reader reader, int classAtt)  {
         this.reader = reader;
@@ -26,47 +20,30 @@ public class Id3Classifier {
         this.classificationValues = reader.getValues(classAtt);
     }
     
-    public DecisionTree buildDecisionTree() {
-        // Define new DecisionTree
-        DecisionTree newTree = new DecisionTree();
-        int splitAtt = getBestAtt();
-        // Set top node with the splitting attribute.
-        newTree.addTopNode(splitAtt);
-        newTree.setValues((HashSet) reader.getValues(splitAtt));
-        System.out.println("Added root node with Att: " + splitAtt);
-        
-        
-        
-        // Go through each value of the splitting attribute and create a child 
-        // node for that value and evaluate it's helpfulness in terms of the 
-        // ratio of values in the classifcation attribute.
-        HashSet<String> splitAttValues = (HashSet) reader.getValues(splitAtt);
-        // Iterate through the values of the splitting attribute.
-        for(String eachValue : splitAttValues) {
-            // Create a reader for each of those values. Each reader is using a
-            // subset where each row has each splitting attribute value.
-            Reader subReader = reader.getSubsetReader(splitAtt, eachValue);
-            // Calculate the new position of the classification attribute once 
-            // the splitting attribute has been removed.
-            int childClassAtt;
-            if(splitAtt < classAtt) {
-                childClassAtt = classAtt--;
-            } else {
-                childClassAtt = classAtt;
-            }
-            
-            subReader.getValues(childClassAtt);
-            // Feed that reader to a new Id3Classifier.
-            Id3Classifier subClassifier = new Id3Classifier(subReader, childClassAtt);
-            String childClassificationValue = subClassifier.getMostCommonClassificationValue();
-            
-            subClassifier.classificationRatio(eachValue);
-        }
-        
-        //TreeNode parent = new TreeNode;
-        
-        return newTree;
-    }
+//    public DecisionTree buildDecisionTree() {
+//        // Define new DecisionTree
+//        DecisionTree newTree = new DecisionTree();
+//        int splitAtt = getBestAtt();
+//        // Set top node with the splitting attribute.
+//        newTree.addTopNode(splitAtt);
+//        newTree.setValues((HashSet) reader.getValues(splitAtt));
+//        System.out.println("Added root node with Att: " + splitAtt);
+//        Reader subReader = reader;
+//        int childClassAtt = classAtt;
+//        boolean treeFinished = false;
+//        while(treeFinished = false) {
+//            newTree.addLevel(splitAtt, reader.getValues(splitAtt), this);
+//            subReader = reader.getSubsetReader(splitAtt, eachValue);
+//            HashSet<String> splitAttValues = (HashSet) reader.getValues(splitAtt);
+//            Id3Classifier subClassifier = new Id3Classifier(subReader, childClassAtt);
+//            // Calculate the new position of the classification attribute once 
+//            // the splitting attribute has been removed.
+//            if(splitAtt < childClassAtt) {
+//                childClassAtt = childClassAtt--;
+//            }
+//        }
+//        return newTree;
+//    }
     
     /**
      * Checks to see if there is only one kind of classification value in the

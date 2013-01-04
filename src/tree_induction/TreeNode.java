@@ -18,15 +18,21 @@ public class TreeNode {
     public HashMap valuesChildrenMap = new HashMap();
     public HashMap classificationRatioMap = new HashMap();
     private String finalDecision = null;
+    public Reader dataSet; 
     
     public void setFinalDecision(String decision) {
         this.finalDecision = decision;
     }
     
-    public TreeNode(int splitAtt, String value) {
+    public TreeNode(int splitAtt, String value, Reader dataSet) {
         this.splitAtt = splitAtt; 
         this.decidingValue = value;
+        this.dataSet = dataSet;
         
+    }
+    
+    public Reader getChildDataSet(String decidingValue) {
+        return dataSet.getSubsetReader(splitAtt, decidingValue);
     }
     
     public void linkChild(TreeNode child, String value) {

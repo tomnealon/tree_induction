@@ -11,7 +11,6 @@ import java.io.IOException;
  * @author tom
  */
 public class TestDecisionTree {
-    DecisionTree myTree = new DecisionTree();
     
     public static void main(String[] args) throws IOException {
         TestDecisionTree.launch();
@@ -20,8 +19,8 @@ public class TestDecisionTree {
     public static void launch() throws IOException {
         System.out.println("Working Directory = " + System.getProperty("user.dir"));      
         ReaderMemory myReader = new ReaderMemory("./data_sources/Book1.csv");
-        Id3Classifier myClassifier = new Id3Classifier(myReader, 4);
-        myClassifier.buildDecisionTree();
+        DecisionTree myDecisionTree = new DecisionTree(myReader, 4);
+        myDecisionTree.growTree();
     }
     
 }
