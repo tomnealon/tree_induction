@@ -35,6 +35,8 @@ public interface Reader {
     
     ArrayList getColList(int col);
     
+    void printAll();
+    
     
     
 }

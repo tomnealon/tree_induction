@@ -9,6 +9,8 @@ import java.util.*;
 public class ReaderMemory implements Reader {
     private int noRows;
     private int noCols;
+    
+    private ToStringHelper help = new ToStringHelper();
 
     private ArrayList<ArrayList> store = new ArrayList<>();
     private ArrayList<Set> attValues = new ArrayList<>();
@@ -48,19 +50,35 @@ public class ReaderMemory implements Reader {
      * @param value 
      */
     public ReaderMemory(Reader parentReader, int col, String value) {
-        
-        for (int i = 0; i < parentReader.getRowNo(); i++) {
-            ArrayList currentRow = parentReader.getRowList(i);
-            if(currentRow.get(col) == value) {
-                currentRow.remove(col);
-                store.add(currentRow);
+//        System.out.println("+++++++++PRINT PARENT READER+++++++++");
+//        parentReader.printAll();
+        System.out.print("££Checking "+parentReader.getRowNo()+" rows"+" at col "+col+" and value "+value);
+        ArrayList currentRow = new ArrayList();
+        Iterator storeIt = store.iterator();
+        while(storeIt.hasNext()) {
+            ArrayList<String> row = (ArrayList<String>) storeIt.next();
+            if(row.get(col).equals(value)) {
+                row.remove(col);
+                this.store.add(currentRow);
+                System.out.println("::Sub reader Add::"+help.toString(currentRow));
             }
         }
+        
+//        ArrayList currentRow = new ArrayList();
+//        for (int i = 0; i < parentReader.getRowNo(); i++) {
+//            currentRow = parentReader.getRowList(i);
+//            if(currentRow.get(col) == value) {
+//                currentRow = (ArrayList) currentRow.clone();
+//                currentRow.remove(col);
+//                store.add(currentRow);
+//                System.out.println("::Sub reader Add::"+help.toString(currentRow));
+//            }
+//        }
         // Metadata calculations for this dataset.
         calcNoCols();
         calcNoRows();
         buildAttValues();
-        System.out.println("SubReader Created using col: " + col + " value: " + value);
+        System.out.println("SubReader Created using col: " + col + " value: " + value + " Has Rows: " + this.noRows + " Cols: " + this.noCols);
     }
     
 
@@ -94,9 +112,15 @@ public class ReaderMemory implements Reader {
     public int valueOccurs(String value, int col) {
         int occurances = 0;
         for(int i = 0; i < noRows; i++) {
-            if(getCell(i, col).equals(value)) {
-                occurances++;
+            try {
+                if(getCell(i, col).equals(value)) {
+                    occurances++;
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+                return 0;
             }
+
         }
         return occurances;
     }
@@ -112,7 +136,22 @@ public class ReaderMemory implements Reader {
 
     @Override
     public String getCell(int row, int col) {
+        //System.out.print("Using getCell with row " + row + " col " + col);
+        //System.out.println(" returns: "+store.get(row).get(col));
+//        try {
             return String.valueOf(store.get(row).get(col));
+//        } catch (Exception e) {
+//            System.out.print(e);
+//            return null;
+//        }
+    }
+    
+    public void printAll() {
+        Iterator storeIt = store.iterator();
+        while(storeIt.hasNext()) {
+            ArrayList<String> row = (ArrayList<String>) storeIt.next();
+            System.out.println(help.toString(row));
+        }
     }
 
     public void printRow(int row) {
@@ -166,6 +205,7 @@ public class ReaderMemory implements Reader {
     public Set<String> getAttValues(int col) {
         Set<String> colClasses = new HashSet<>();
         for(int i = startRow; i < noRows; i++) {
+            //System.out.println("getAttValues with: "+col);
             colClasses.add(getCell(i, col));
         }
         return colClasses;

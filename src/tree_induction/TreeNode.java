@@ -3,6 +3,7 @@ package tree_induction;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -13,9 +14,9 @@ public class TreeNode {
     public TreeNode parent = null;
     public String classificationValue = null;
     public int splitAtt;
-    public String decidingValue;
+    public String attValue;
     public ArrayList<TreeNode> children = new ArrayList<>();
-    public HashSet<String> childValues = new HashSet<>();
+    public Set<String> childValues;
     public HashMap valuesChildrenMap = new HashMap();
     public HashMap classificationRatioMap = new HashMap();
     private String finalDecision = null;
@@ -25,16 +26,18 @@ public class TreeNode {
         this.finalDecision = decision;
     }
     
-    public TreeNode(int splitAtt, String value, Reader dataSet) {
+    public TreeNode(int splitAtt, String value, Reader dataSet, Set childValues) {
         System.out.println("New Node:: SplitAt: "+splitAtt+" Using Value: "+value);
         this.splitAtt = splitAtt; 
-        this.decidingValue = value;
+        this.attValue = value;
         this.dataSet = dataSet;
+        this.childValues = childValues;
         
     }
     
     public Reader getChildDataSet(String decidingValue) {
-        return dataSet.getSubsetReader(splitAtt, decidingValue);
+        Reader newDataSet = dataSet.getSubsetReader(splitAtt, decidingValue);
+        return newDataSet;
     }
     
     public void linkChild(TreeNode child, String value) {

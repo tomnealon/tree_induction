@@ -13,12 +13,16 @@ public class Id3Classifier {
     public double classInfoGain;
     public Set classificationValues;
     
+    private ToStringHelper help = new ToStringHelper();
+    
     public Id3Classifier(Reader reader, int classAtt)  {
         this.reader = reader;
         this.classAtt = classAtt;
-        classInfoGain = infoNeed();
+        
         this.classificationValues = reader.getAttValues(classAtt);
-        System.out.println("Classifer Created using classAtt: " + classAtt);
+        System.out.print("Classifer Created using classAtt: " + classAtt);
+        classInfoGain = infoNeed();
+        System.out.println(" Infoneed calculated as: "+classInfoGain);
     }
     
 //    public DecisionTree buildDecisionTree() {
@@ -131,7 +135,7 @@ public class Id3Classifier {
      * @return 
      */
     public int getBestAtt() {
-        System.out.println("getBestAtt");
+        //System.out.println("getBestAtt");
         int best =  0;
         double currentInfo = 0;
         for(int col = 0; col < reader.getColNo(); col++) {
@@ -160,7 +164,7 @@ public class Id3Classifier {
      */
     private double infoNeed() {
         double info = 0;
-        int noClasses = reader.getAttValues(classAtt).size();
+        //int noClasses = reader.getAttValues(classAtt).size();
         double rows = reader.getRowNo();
         Iterator valueIterator = reader.getAttValues(classAtt).iterator();
         while(valueIterator.hasNext()) {
@@ -181,7 +185,8 @@ public class Id3Classifier {
      */
     public double testAtt(int col) {
         double testInfo = 0;
-        Iterator testIterator = reader.getAttValues(col).iterator();
+        Set attValues = reader.getAttValues(col);
+        Iterator testIterator = attValues.iterator();
         while(testIterator.hasNext()) {
             Iterator valueIterator = reader.getAttValues(classAtt).iterator();
             String testValue = (String) testIterator.next();
@@ -200,6 +205,8 @@ public class Id3Classifier {
             }
             testInfo = testInfo + testInfoForValue * testInfoMult;
         }
+        String attSet = help.toString(attValues);
+        System.out.println("Attribute: "+col+" Values: "+attSet+" tested. Gain: "+(classInfoGain - testInfo));
         return classInfoGain - testInfo;
     }
     
